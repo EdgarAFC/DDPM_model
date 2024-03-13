@@ -21,7 +21,8 @@ class UNETv13(nn.Module):
         self.time_mlp = nn.Sequential(
             PositionalEncoding(features[0]),
             linear(features[0], emb_dim),
-            SiLU(),
+            # SiLU(),   commented efernandez 13.03.2024
+            nn.ReLU(),
             linear(emb_dim, emb_dim),
         )
 
@@ -176,11 +177,13 @@ class ResBlock(nn.Module):
 
         self.in_layers = nn.Sequential(
             normalization(channels, group_norm),
-            SiLU(),
+            # SiLU(),   commented efernandez 13.03.2024
+            nn.ReLU(),
             conv_nd(dims, channels, self.out_channels, 3, padding=1),
         )
         self.emb_layers = nn.Sequential(
-            SiLU(),
+            # SiLU(),   commented efernandez 13.03.2024
+            nn.ReLU(),
             linear(
                 emb_channels,
                 2 * self.out_channels if use_scale_shift_norm else self.out_channels,
@@ -188,7 +191,8 @@ class ResBlock(nn.Module):
         )
         self.out_layers = nn.Sequential(
             normalization(self.out_channels, group_norm),
-            SiLU(),
+            # SiLU(),   commented efernandez 13.03.2024
+            nn.ReLU(),
             nn.Dropout(p=dropout),
             zero_module(
                 conv_nd(dims, self.out_channels, self.out_channels, 3, padding=1)
