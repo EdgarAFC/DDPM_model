@@ -5,4 +5,6 @@
 #SBATCH --nodelist=worker2
 #SBATCH --output="log_model.out"
 
-srun python /nfs/privileged/edgar/projects/DPM_model/main.py
+source /etc/profile.d/modules.sh
+module load edgar/1.0
+srun python /nfs/privileged/edgar/projects/DDPM_model/split_fold.py
