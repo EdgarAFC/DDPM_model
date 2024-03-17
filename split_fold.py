@@ -81,27 +81,27 @@ def split_vectors(source_folder_RF, folder_RF_train, folder_RF_test,
         vectors_folder_ONEPW_test.append(all_files_ONEPW[ind-1])
 
     
-    # Copy selected vectors to destination folders
-    for vector_file in vectors_folder_RF_train:
-        source_path = os.path.join(source_folder_RF, vector_file)
-        dest_path = os.path.join(folder_RF_train, vector_file)
-        shutil.copy2(source_path, dest_path)
+    # # Copy selected vectors to destination folders
+    # for vector_file in vectors_folder_RF_train:
+    #     source_path = os.path.join(source_folder_RF, vector_file)
+    #     dest_path = os.path.join(folder_RF_train, vector_file)
+    #     shutil.copy2(source_path, dest_path)
     
-    for vector_file in vectors_folder_RF_test:
-        source_path = os.path.join(source_folder_RF, vector_file)
-        dest_path = os.path.join(folder_RF_test, vector_file)
-        shutil.copy2(source_path, dest_path)
+    # for vector_file in vectors_folder_RF_test:
+    #     source_path = os.path.join(source_folder_RF, vector_file)
+    #     dest_path = os.path.join(folder_RF_test, vector_file)
+    #     shutil.copy2(source_path, dest_path)
 
-    # Copy selected vectors to destination folders
-    for vector_file in vectors_folder_ENH_train:
-        source_path = os.path.join(source_folder_ENH, vector_file)
-        dest_path = os.path.join(folder_ENH_train, vector_file)
-        shutil.copy2(source_path, dest_path)
+    # # Copy selected vectors to destination folders
+    # for vector_file in vectors_folder_ENH_train:
+    #     source_path = os.path.join(source_folder_ENH, vector_file)
+    #     dest_path = os.path.join(folder_ENH_train, vector_file)
+    #     shutil.copy2(source_path, dest_path)
     
-    for vector_file in vectors_folder_ENH_test:
-        source_path = os.path.join(source_folder_ENH, vector_file)
-        dest_path = os.path.join(folder_ENH_test, vector_file)
-        shutil.copy2(source_path, dest_path)
+    # for vector_file in vectors_folder_ENH_test:
+    #     source_path = os.path.join(source_folder_ENH, vector_file)
+    #     dest_path = os.path.join(folder_ENH_test, vector_file)
+    #     shutil.copy2(source_path, dest_path)
 
     # Copy selected vectors to destination folders
     for vector_file in vectors_folder_ONEPW_train:
