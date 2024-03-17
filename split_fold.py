@@ -117,17 +117,17 @@ def split_vectors(source_folder_RF, folder_RF_train, folder_RF_test,
 
 def main():
 
-    source_folder_RF = "/nfs/priviledged/isalazar/datasets/simulatedCystDataset/TUFFC/input_id"
-    folder_RF_train = "/nfs/priviledged/edgar/datasets/dataRF/RF_train"
-    folder_RF_test = "/nfs/priviledged/edgar/datasets/dataRF/RF_test"
+    source_folder_RF = "/nfs/privileged/isalazar/datasets/simulatedCystDataset/TUFFC/input_id"
+    folder_RF_train = "/nfs/privileged/edgar/datasets/dataRF/RF_train"
+    folder_RF_test = "/nfs/privileged/edgar/datasets/dataRF/RF_test"
 
-    source_folder_ENH = "/nfs/priviledged/isalazar/datasets/simulatedCystDataset/TUFFC/target_enh"
-    folder_ENH_train = "/nfs/priviledged/edgar/datasets/dataENH/ENH_train"
-    folder_ENH_test = "/nfs/priviledged/edgar/datasets/dataENH/ENH_test"
+    source_folder_ENH = "/nfs/privileged/isalazar/datasets/simulatedCystDataset/TUFFC/target_enh"
+    folder_ENH_train = "/nfs/privileged/edgar/datasets/dataENH/ENH_train"
+    folder_ENH_test = "/nfs/privileged/edgar/datasets/dataENH/ENH_test"
 
-    source_folder_ONEPW = "/nfs/priviledged/isalazar/datasets/simulatedCystDataset/TUFFC/target_from_raw"
-    folder_ONEPW_train = "/nfs/priviledged/edgar/datasets/dataONEPW/ONEPW_train"
-    folder_ONEPW_test = "/nfs/priviledged/edgar/datasets/dataONEPW/ONEPW_test"
+    source_folder_ONEPW = "/nfs/privileged/isalazar/datasets/simulatedCystDataset/TUFFC/target_from_raw"
+    folder_ONEPW_train = "/nfs/privileged/edgar/datasets/dataONEPW/ONEPW_train"
+    folder_ONEPW_test = "/nfs/privileged/edgar/datasets/dataONEPW/ONEPW_test"
     
     split_vectors(source_folder_RF, folder_RF_train, folder_RF_test,
                   source_folder_ENH, folder_ENH_train, folder_ENH_test,
