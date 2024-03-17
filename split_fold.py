@@ -103,11 +103,11 @@ def split_vectors(source_folder_RF, folder_RF_train, folder_RF_test,
     #     dest_path = os.path.join(folder_ENH_test, vector_file)
     #     shutil.copy2(source_path, dest_path)
 
-    # Copy selected vectors to destination folders
-    for vector_file in vectors_folder_ONEPW_train:
-        source_path = os.path.join(source_folder_ONEPW, vector_file)
-        dest_path = os.path.join(folder_ONEPW_train, vector_file)
-        shutil.copy2(source_path, dest_path)
+    # # Copy selected vectors to destination folders
+    # for vector_file in vectors_folder_ONEPW_train:
+    #     source_path = os.path.join(source_folder_ONEPW, vector_file)
+    #     dest_path = os.path.join(folder_ONEPW_train, vector_file)
+    #     shutil.copy2(source_path, dest_path)
     
     for vector_file in vectors_folder_ONEPW_test:
         source_path = os.path.join(source_folder_ONEPW, vector_file)
