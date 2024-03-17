@@ -51,8 +51,8 @@ def create_gaussian_diffusion(
 ############
 
 diffusion = create_gaussian_diffusion()
-input_folder = '/TESIS/DATOS_1/rf_train'
-output_folder = '/TESIS/DATOS_TESIS2/onepw_train'
+input_folder = '/nfs/privileged/edgar/datasets/dataRF/RF_train'
+output_folder = '/nfs/privileged/edgar/datasets/dataONEPW/ONEPW_train'
 
 data = gd.CustomDataset(input_folder, output_folder, transform=True)
 device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
@@ -68,9 +68,9 @@ y_sample = y_sample.to(device)
 from model7 import UNETv13
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
-save_dir = '/CODIGOS_TESIS/TESIS2/Unet_models/ddpm_tmodels/v15'
-training_epochs = 10
-model13A = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
+save_dir = '/nfs/privileged/edgar/trained_models/DDPM_model/v1_FT'
+training_epochs = 5#10
+model13A = UNETv13(residual=False, attention_res=[], group_norm=True).to(device)
 model13A.load_state_dict(torch.load(f"{save_dir}/model_{training_epochs}.pth", map_location=device))
 print("Num params: ", sum(p.numel() for p in model13A.parameters()))
 
@@ -80,7 +80,7 @@ plt.scatter([x for x in range(len(loss_npy))], loss_npy, s=0.2)
 plt.xlabel('# Iteration')
 plt.ylabel('Loss')
 #plt.xlim(000,35000)
-plt.ylim(0, 0.01)
+#plt.ylim(0, 0.01)
 plt.show()
 
 ##################
