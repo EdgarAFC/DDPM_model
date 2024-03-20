@@ -7,4 +7,4 @@
 
 source /etc/profile.d/modules.sh
 module load edgar/1.0
-srun python /nfs/privileged/edgar/projects/DDPM_model/main.py
+srun python /mnt/nfs/efernandez/projects/DDPM_model/main.py
