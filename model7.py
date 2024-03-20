@@ -28,7 +28,7 @@ class UNETv13(nn.Module):
 
         self.initial_conv = conv_nd(2, in_channels, features[0], 3, padding=1)
         
-        self.initial_block = ResBlock(
+        self.initial_block = ResBlock2(
             channels = features[0],
             emb_channels = emb_dim,
             dropout = 0,
@@ -47,7 +47,7 @@ class UNETv13(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
         for feature in features:
             self.downBlocks.append(
-                ResBlock(
+                ResBlock2(
                     channels = feature,
                     emb_channels = emb_dim,
                     dropout = 0,
@@ -75,7 +75,7 @@ class UNETv13(nn.Module):
             self.upConvs.append(
                 nn.ConvTranspose2d(feature * 2, feature, kernel_size=2, stride=2))
             self.upBlocks.append(
-                ResBlock(
+                ResBlock2(
                     channels = feature * 2,
                     emb_channels = emb_dim,
                     dropout = 0,
@@ -197,6 +197,116 @@ class ResBlock(nn.Module):
             zero_module(
                 conv_nd(dims, self.out_channels, self.out_channels, 3, padding=1)
             ),
+        )
+
+        if residual:
+            if self.out_channels == channels:
+                self.skip_connection = nn.Identity()
+            elif use_conv:
+                self.skip_connection = conv_nd(
+                    dims, channels, self.out_channels, 3, padding=1
+                )
+            else:
+                self.skip_connection = conv_nd(dims, channels, self.out_channels, 1)
+        else:
+            self.skip_connection = None
+
+    def forward(self, x, emb):
+        """
+        Apply the block to a Tensor, conditioned on a timestep embedding.
+
+        :param x: an [N x C x ...] Tensor of features.
+        :param emb: an [N x emb_channels] Tensor of timestep embeddings.
+        :return: an [N x C x ...] Tensor of outputs.
+        """
+        return checkpoint(
+            self._forward, (x, emb), self.parameters(), self.use_checkpoint
+        )
+
+    def _forward(self, x, emb):
+        h = self.in_layers(x)
+        # print(emb.shape)
+        emb_out = self.emb_layers(emb).type(h.dtype)
+        while len(emb_out.shape) < len(h.shape):
+            emb_out = emb_out[..., None]
+        if self.use_scale_shift_norm:
+            out_norm, out_rest = self.out_layers[0], self.out_layers[1:]
+            scale, shift = th.chunk(emb_out, 2, dim=1)
+            h = out_norm(h) * (1 + scale) + shift
+            h = out_rest(h)
+        else:
+            h = h + emb_out
+            h = self.out_layers(h)
+        if self.residual:
+            h = self.skip_connection(x) + h
+        return h
+
+class ResBlock2(nn.Module):
+    """
+    A residual block that can optionally change the number of channels.
+
+    :param channels: the number of input channels.
+    :param emb_channels: the number of timestep embedding channels.
+    :param dropout: the rate of dropout.
+    :param out_channels: if specified, the number of out channels.
+    :param use_conv: if True and out_channels is specified, use a spatial
+        convolution instead of a smaller 1x1 convolution to change the
+        channels in the skip connection.
+    :param dims: determines if the signal is 1D, 2D, or 3D.
+    :param use_checkpoint: if True, use gradient checkpointing on this module.
+    """
+
+    def __init__(
+        self,
+        channels,
+        emb_channels,
+        dropout,
+        out_channels=None,
+        use_conv=False,
+        use_scale_shift_norm=False,
+        dims=2,
+        use_checkpoint=False,
+        residual = True,
+        group_norm = True
+    ):
+        super().__init__()
+        self.channels = channels
+        self.emb_channels = emb_channels
+        self.dropout = dropout
+        self.out_channels = out_channels
+        self.use_conv = use_conv
+        self.residual = residual
+        self.use_checkpoint = use_checkpoint
+        self.use_scale_shift_norm = use_scale_shift_norm
+
+        self.in_layers = nn.Sequential(
+            normalization(channels, group_norm),
+            # SiLU(),   #commented efernandez 13.03.2024
+            conv_nd(dims, channels, self.out_channels, 3, padding=1),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(),
+            
+        )
+        self.emb_layers = nn.Sequential(
+            # SiLU(),   #commented efernandez 13.03.2024
+            nn.ReLU(),
+            linear(
+                emb_channels,
+                2 * self.out_channels if use_scale_shift_norm else self.out_channels,
+            ),
+        )
+        self.out_layers = nn.Sequential(
+            normalization(self.out_channels, group_norm),
+            # SiLU(),   #commented efernandez 13.03.2024
+            zero_module(
+                conv_nd(dims, self.out_channels, self.out_channels, 3, padding=1)
+            ),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(),
+            nn.Dropout(p=dropout),
+            # zero_module(
+            #     conv_nd(dims, self.out_channels, self.out_channels, 3, padding=1)
+            # ),
         )
 
         if residual:
