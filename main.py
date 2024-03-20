@@ -15,9 +15,9 @@ from torchvision import transforms as T
 import PIL
 from PIL import Image
 
-TRAIN_PATH = '/nfs/privileged/edgar/datasets/dataRF/RF_train'
-TRAIN_ENH_PATH= '/nfs/privileged/edgar/datasets/dataENH'
-TRAIN_ONEPW_PATH= '/nfs/privileged/edgar/datasets/dataONEPW/ONEPW_train'
+TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
+TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH'
+TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 
 '''
 DATASET
@@ -89,7 +89,7 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/nfs/privileged/edgar/trained_models/DDPM_model/v3_FT'
+    save_dir = '/mnt/nfs/efernandez//trained_models/DDPM_model/v3_FT'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 

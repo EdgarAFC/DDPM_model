@@ -270,6 +270,7 @@ class ResBlock2(nn.Module):
         group_norm = True
     ):
         super().__init__()
+        # print("Using res2")
         self.channels = channels
         self.emb_channels = emb_channels
         self.dropout = dropout

@@ -89,13 +89,13 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/CODIGOS_TESIS/TESIS2/Unet_models/v16'
+    save_dir = '/CODIGOS_TESIS/TESIS2/Unet_models/v3_FT'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
     # training hyperparameters
     batch_size = 4  # 4 for testing, 16 for training
-    n_epoch = 10
+    n_epoch = 5
     l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
     # Loading Data
