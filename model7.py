@@ -285,8 +285,8 @@ class ResBlock2(nn.Module):
             # SiLU(),   #commented efernandez 13.03.2024
             conv_nd(dims, channels, self.out_channels, 3, padding=1),
             nn.BatchNorm2d(out_channels),
-            # nn.ReLU(),
-            SiLU()
+            nn.ReLU(),
+            # SiLU()
             
         )
         self.emb_layers = nn.Sequential(
@@ -304,8 +304,8 @@ class ResBlock2(nn.Module):
                 conv_nd(dims, self.out_channels, self.out_channels, 3, padding=1)
             ),
             nn.BatchNorm2d(out_channels),
-            # nn.ReLU(),
-            SiLU(),
+            nn.ReLU(),
+            # SiLU(),
             nn.Dropout(p=dropout),
             # zero_module(
             #     conv_nd(dims, self.out_channels, self.out_channels, 3, padding=1)

@@ -89,7 +89,7 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v4_FT'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v5_FT'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
