@@ -400,11 +400,12 @@ class ResBlock2(nn.Module):
         self.use_scale_shift_norm = use_scale_shift_norm
 
         self.in_layers = nn.Sequential(
-            normalization(channels, group_norm),
+            # normalization(channels, group_norm),
             # SiLU(),   #commented efernandez 13.03.2024
             conv_nd(dims, channels, self.out_channels, 3, padding=1),
-            nn.BatchNorm2d(out_channels),
+            # nn.BatchNorm2d(out_channels),
             # nn.ReLU(),
+            normalization(channels, group_norm),
             SiLU()
             
         )
@@ -417,13 +418,14 @@ class ResBlock2(nn.Module):
             ),
         )
         self.out_layers = nn.Sequential(
-            normalization(self.out_channels, group_norm),
+            # normalization(self.out_channels, group_norm),
             # SiLU(),   #commented efernandez 13.03.2024
             zero_module(
                 conv_nd(dims, self.out_channels, self.out_channels, 3, padding=1)
             ),
-            nn.BatchNorm2d(out_channels),
+            # nn.BatchNorm2d(out_channels),
             # nn.ReLU(),
+            normalization(self.out_channels, group_norm),
             SiLU(),
             nn.Dropout(p=dropout),
             # zero_module(
