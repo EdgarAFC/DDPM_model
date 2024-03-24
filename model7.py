@@ -405,7 +405,7 @@ class ResBlock2(nn.Module):
             conv_nd(dims, channels, self.out_channels, 3, padding=1),
             # nn.BatchNorm2d(out_channels),
             # nn.ReLU(),
-            normalization(channels, group_norm),
+            normalization(self.out_channels, group_norm),
             SiLU()
             
         )
