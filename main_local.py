@@ -89,7 +89,7 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/CODIGOS_TESIS/TESIS2/Unet_models/v3_FT'
+    save_dir = '/CODIGOS_TESIS/TESIS2/Unet_models/v6_FT'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
