@@ -83,7 +83,7 @@ class ONEPW_Dataset(Dataset):
                 onepw_img = trans(np.float32(onepw_img))
                 new_min = -1
                 new_max = 1
-                enh_img = enh_img * (new_max - new_min) + new_min
+                onepw_img = onepw_img * (new_max - new_min) + new_min
         else:
             return rf_image
 
