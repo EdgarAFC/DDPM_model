@@ -54,12 +54,13 @@ class ONEPW_Dataset(Dataset):
             rf_image = self.img_transforms(rf_image)
         else:
             #rf_image = trans(np.float32(rf_image))
-            rf_image = trans(np.float32(rf_image)).unsqueeze(0)
+            # rf_image = trans(np.float32(rf_image)).unsqueeze(0)
             #rf_image = F.interpolate(rf_image, size=(64,64), mode='bilinear', align_corners=False)
-            rf_image = rf_image.squeeze(0)
+            # rf_image = rf_image.squeeze(0)
             #img = F.interpolate(img, size=(64,64), mode='bilinear', align_corners=False)
             #img = img.squeeze(0)
             #img = trans(img)
+            rf_image = trans(np.float32(rf_image))
 
 
         if self.train_onepw_img is not None:
@@ -70,15 +71,19 @@ class ONEPW_Dataset(Dataset):
                 onepw_img = self.onepw_img_transforms(onepw_img)
             else:
                 #enh_img = trans(np.float32(enh_img))
-                onepw_img = trans(np.float32(onepw_img)).unsqueeze(0)
+                # onepw_img = trans(np.float32(onepw_img)).unsqueeze(0)
                 #enh_img = F.interpolate(enh_img, size=(64,64), mode='bilinear', align_corners=False)
-                onepw_img = onepw_img.squeeze(0)
+                # onepw_img = onepw_img.squeeze(0)
                 # new_min = -1
                 # new_max = 1
                 # enh_img = enh_img * (new_max - new_min) + new_min
                 #enh_img = F.interpolate(enh_img, size=(64,64), mode='bilinear', align_corners=False)
                 #enh_img = enh_img.squeeze(0)
                 #enh_img = trans(enh_img)
+                onepw_img = trans(np.float32(onepw_img))
+                new_min = -1
+                new_max = 1
+                enh_img = enh_img * (new_max - new_min) + new_min
         else:
             return rf_image
 
@@ -89,13 +94,13 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_50epoch'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
     # training hyperparameters
     batch_size = 4  # 4 for testing, 16 for training
-    n_epoch = 5
+    n_epoch = 50
     l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
     # Loading Data
