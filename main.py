@@ -94,7 +94,7 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_50epoch'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v7_TT_50epoch'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
@@ -128,7 +128,7 @@ def main():
 
     # DDPM noise schedule
     time_steps = 1000
-    betas = gd.get_named_beta_schedule('linear', time_steps)
+    betas = gd.get_named_beta_schedule('cosine', time_steps)
     diffusion = gd.SpacedDiffusion(
         use_timesteps = gd.space_timesteps(time_steps, section_counts=[time_steps]),
         betas = betas,
@@ -178,7 +178,7 @@ def main():
             # nn.utils.clip_grad_norm_(nn_model.parameters(),0.5)
             loss_arr.append(loss.item())
             optim.step()
-            torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
+            # torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
 
         print(f' Epoch {ep:03}/{n_epoch}, loss: {loss_arr[-1]:.2f}, {datetime.now()}')
         # save model every x epochs
