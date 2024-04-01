@@ -18,9 +18,9 @@ from PIL import Image
 from torchvision import transforms
 from torchvision import transforms as T
 
-TRAIN_PATH = '/TESIS/DATOS_1/rf_train'
-TRAIN_ENH_PATH= '/TESIS/DATOS_1/target_enh/'
-TRAIN_ONEPW_PATH= '/TESIS/DATOS_TESIS2/onepw_train'
+TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
+TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH'
+TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 
 '''
 DATASET
@@ -93,7 +93,7 @@ class ONEPW_Dataset(Dataset):
         return rf_image, onepw_img
 
 def rayleigh_pdf():
-    op_image = np.load('/TESIS/DATOS_TESIS2/onepw_train/simu00001.npy')
+    op_image = np.load('/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train/simu00001.npy')
     # Flatten the array to create a 1D array
     flattened_data = op_image.flatten()
     
@@ -135,7 +135,7 @@ def main():
     device = torch.device('cpu')
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/CODIGOS_TESIS/TESIS2/Unet_models/vTEST_TT'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v8_TT_50epoch'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
@@ -211,7 +211,7 @@ def main():
             samples = np.random.choice(x_values-1, size=num_samples, p=hist/hist.sum())
 
             # Reshape the samples into the desired tensor shape
-            tensor_shape = (4, 1, 800, 128)
+            tensor_shape = (BATCH_SIZE, 1, 800, 128)
             tensor = np.reshape(samples, tensor_shape)
             noise =  torch.from_numpy(np.float32((tensor)))
 
