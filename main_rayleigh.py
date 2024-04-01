@@ -21,7 +21,9 @@ from torchvision import transforms as T
 TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
-
+# TRAIN_PATH = '/TESIS/DATOS_1/rf_train'
+# TRAIN_ENH_PATH= '/TESIS/DATOS_1/target_enh/'
+# TRAIN_ONEPW_PATH= '/TESIS/DATOS_TESIS2/onepw_train'
 '''
 DATASET
 '''
@@ -132,7 +134,6 @@ def show_tensor_image(image):
 def main():
     # network hyperparameters
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
-    device = torch.device('cpu')
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
     save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v8_TT_50epoch'
@@ -213,17 +214,16 @@ def main():
             # Reshape the samples into the desired tensor shape
             tensor_shape = (BATCH_SIZE, 1, 800, 128)
             tensor = np.reshape(samples, tensor_shape)
-            noise =  torch.from_numpy(np.float32((tensor)))
+            noise =  torch.from_numpy(np.float32((tensor))).to(device)
 
             ###########
             t = torch.randint(0, time_steps, (x.shape[0],)).to(device)
-            print(t)
             y_pert = diffusion.q_sample(y, t, noise)
 
-            show_tensor_image(y_pert.cpu())
-            plt.colorbar()
-            plt.title('Objective')
-            plt.show()
+            # show_tensor_image(y_pert.cpu())
+            # plt.colorbar()
+            # plt.title('Objective')
+            # plt.show()
             
             # use network to recover noise
             predicted_noise = nn_model(x, y_pert, t)
@@ -235,7 +235,7 @@ def main():
             # nn.utils.clip_grad_norm_(nn_model.parameters(),0.5)
             loss_arr.append(loss.item())
             optim.step()
-            torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
+            # torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
 
         print(f' Epoch {ep:03}/{n_epoch}, loss: {loss_arr[-1]:.2f}, {datetime.now()}')
         # save model every x epochs
