@@ -12,7 +12,7 @@ from torchvision import transforms
 import PIL
 from PIL import Image
 
-from model7 import UNETv13
+from model7_shift_scale import UNETv13
 import torch.nn.functional as func
 
 '''
@@ -117,9 +117,17 @@ TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 
+# TRAIN_PATH = '/TESIS/DATOS_1/rf_train'
+# TRAIN_ENH_PATH= '/TESIS/DATOS_1/target_enh/'
+# TRAIN_ONEPW_PATH= '/TESIS/DATOS_TESIS2/onepw_train'
+
 TEST_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_test'
 TEST_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_test'
 TEST_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_test'
+
+# TEST_PATH = '/TESIS/DATOS_1/rf_test'
+# TEST_ENH_PATH='/TESIS/DATOS_1/target_enh/'
+# TEST_ONEPW_PATH='/TESIS/DATOS_TESIS2/onepw_test'
 
 BATCH_SIZE = 4
 
