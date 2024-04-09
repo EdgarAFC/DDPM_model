@@ -166,7 +166,7 @@ def main():
         x = x.to(device)
         y = y.to(device)
 
-        generated_samples = diffusion.p_sample_loop(model13A, y.shape, x, progress=True, clip_denoised=True)
+        generated_samples = diffusion.p_sample_loop(model13A, y.shape, x, progress=False, clip_denoised=True)
 
     # # loss is mean squared error between the predicted and true noise
     # mse_loss.append(func.mse_loss(generated_image, y))
