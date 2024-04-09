@@ -186,7 +186,7 @@ def main():
             sample = sample.cpu().numpy()
             np.save(save_dir+f"/sample_{num_samples}.npy", sample)
 
-        if num_samples==BATCH_SIZE and num_samples%10==0:
+        if num_samples==BATCH_SIZE or num_samples%10==0:
             write_to_file(num_samples)
         
         # for i in range(BATCH_SIZE):
