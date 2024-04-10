@@ -16,11 +16,11 @@ from model7_shift_scale import UNETv13
 import torch.nn.functional as func
 
 ################################
-file_loss = open("/mnt/nfs/efernandez/projects/DDPM_model/log_sampling10.txt", "w")
-file_loss.close()
+file_loss = open("/mnt/nfs/efernandez/projects/DDPM_model/log_sampling1.txt", "w")
+#file_loss.close()
 ################################
 def write_to_file(input): 
-    with open("/mnt/nfs/efernandez/projects/DDPM_model/log_sampling10.txt", "a") as textfile: 
+    with open("/mnt/nfs/efernandez/projects/DDPM_model/log_sampling1.txt", "a") as textfile: 
         textfile.write(str(input) + "\n") 
     textfile.close()
 
@@ -121,7 +121,7 @@ def create_gaussian_diffusion(
 
 def main():
 
-    diffusion = create_gaussian_diffusion(noise_schedule="cosine")
+    diffusion = create_gaussian_diffusion(noise_schedule="linear")
 
     TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
     TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
@@ -150,7 +150,7 @@ def main():
 
     test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v7_TT_50epoch'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v9_TT_50epoch'
     # save_dir = '/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_50epoch'
     training_epochs = 50#10
     model13A = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
