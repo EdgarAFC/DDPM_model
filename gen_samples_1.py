@@ -161,7 +161,6 @@ def main():
 
     #print("Num params: ", sum(p.numel() for p in model13A.parameters()))
 
-    mse_loss=[]
     num_samples = 0
 
     batch_number=0
