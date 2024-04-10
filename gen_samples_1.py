@@ -16,11 +16,11 @@ from model7_shift_scale import UNETv13
 import torch.nn.functional as func
 
 ################################
-file_loss = open("/mnt/nfs/efernandez/projects/DDPM_model/log_sampling1.txt", "w")
-#file_loss.close()
+file_loss = open("/mnt/nfs/efernandez/projects/DDPM_model/log_sampling_w1.txt", "w")
+file_loss.close()
 ################################
 def write_to_file(input): 
-    with open("/mnt/nfs/efernandez/projects/DDPM_model/log_sampling1.txt", "a") as textfile: 
+    with open("/mnt/nfs/efernandez/projects/DDPM_model/log_sampling_w1.txt", "a") as textfile: 
         textfile.write(str(input) + "\n") 
     textfile.close()
 
@@ -148,18 +148,23 @@ def main():
     train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_ONEPW_PATH)
     test_dataset = ONEPW_Dataset(TEST_PATH, TEST_ONEPW_PATH)
 
-    test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v9_TT_50epoch'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v9_TT_50epoch_gen'
     # save_dir = '/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_50epoch'
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
+    model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v9_TT_50epoch'
     training_epochs = 50#10
     model13A = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
-    model13A.load_state_dict(torch.load(f"{save_dir}/model_{training_epochs}.pth", map_location=device))
+    model13A.load_state_dict(torch.load(f"{model_dir}/model_{training_epochs}.pth", map_location=device))
 
     #print("Num params: ", sum(p.numel() for p in model13A.parameters()))
 
     mse_loss=[]
     num_samples = 0
+
+    batch_number=0
 
     torch.manual_seed(2809)
     for x, y in test_dataloader:
@@ -174,20 +179,23 @@ def main():
     # np.save(save_dir+f"/test_mse_loss.npy", np.array(mse_loss))
     # print(f'Test_mse: {sum(mse_loss)/len(mse_loss)}')
 
-        for i in range(BATCH_SIZE):
+        for id, sample in enumerate(generated_samples):
             num_samples=num_samples+1
-            sample = generated_samples[i, :, :, :]
+            # sample = generated_samples[i, :, :, :]
             # plt.figure(figsize=(9, 3))
             # # plt.subplot(1, 2, 1)
             # show_tensor_image(sample.cpu().detach())
             # plt.colorbar()
             # plt.title('ENH')
             # plt.show()
-            sample = sample.cpu().numpy()
-            np.save(save_dir+f"/sample_{num_samples}.npy", sample)
+            name = (test_dataset.images[batch_number * BATCH_SIZE + id])
+            write_to_file(name)
+            np.save(save_dir+f"/{name}.npy", sample.cpu().detach().numpy())
+
+        batch_number += 1
 
         if num_samples==BATCH_SIZE or num_samples%10==0:
-            write_to_file(num_samples)
+            write_to_file("Número de muestras generadas",num_samples)
         
         # for i in range(BATCH_SIZE):
         #     y = y[i, :, :, :]
