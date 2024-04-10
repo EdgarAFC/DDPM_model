@@ -12,7 +12,7 @@ from torchvision import transforms
 import PIL
 from PIL import Image
 
-from model7_shift_scale import UNETv13
+from model7 import UNETv13
 import torch.nn.functional as func
 
 ################################
