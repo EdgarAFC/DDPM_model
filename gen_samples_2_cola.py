@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader, Dataset
 import os
 
@@ -73,7 +73,7 @@ def show_tensor_image(image):
     # Take first image of batch
     if len(image.shape) == 4:
         image = image[0, :, :, :]
-    plt.imshow(reverse_transforms(image), cmap='gray', extent=[-20,20,50,0])
+    # plt.imshow(reverse_transforms(image), cmap='gray', extent=[-20,20,50,0])
     # plt.clim(-60,0)
 
 
