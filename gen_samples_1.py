@@ -194,7 +194,8 @@ def main():
         batch_number += 1
 
         if num_samples==BATCH_SIZE or num_samples%10==0:
-            write_to_file("Número de muestras generadas",num_samples)
+            write_to_file("Número de muestras generadas:")
+            write_to_file(num_samples)
         
         # for i in range(BATCH_SIZE):
         #     y = y[i, :, :, :]
