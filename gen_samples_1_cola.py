@@ -189,7 +189,7 @@ def main():
             # plt.show()
             name = (test_dataset.images[batch_number * BATCH_SIZE + id])
             write_to_file(name)
-            np.save(save_dir/name, sample.cpu().detach().numpy())
+            np.save(save_dir+name, sample.cpu().detach().numpy())
 
         batch_number += 1
 
