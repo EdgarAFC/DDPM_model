@@ -6,5 +6,5 @@
 #SBATCH --output="log_model_sig.out"
 
 source /etc/profile.d/modules.sh
-module load ifsr-advpertbeamf/1.0
+module load students_env/1.0
 srun python /mnt/nfs/efernandez/projects/DDPM_model/main.py
