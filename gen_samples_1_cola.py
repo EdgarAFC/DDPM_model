@@ -150,7 +150,7 @@ def main():
 
     test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v10_TT_50epoch_gen'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v10_TT_50epoch_gen/'
     # save_dir = '/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_50epoch'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
