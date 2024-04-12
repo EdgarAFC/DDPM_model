@@ -7,4 +7,4 @@
 
 source /etc/profile.d/modules.sh
 module load ifsr-advpertbeamf/1.0
-srun python /mnt/nfs/efernandez/projects/DDPM_model/gen_samples_2_cola.py
+srun python /mnt/nfs/efernandez/projects/DDPM_model/main.py
