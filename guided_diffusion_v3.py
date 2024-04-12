@@ -14,6 +14,10 @@ import torch as th
 from nn import mean_flat
 from losses import normal_kl, discretized_gaussian_log_likelihood
 
+import math
+
+def sigmoid(x):
+  return 1 / (1 + math.exp(-x))
 
 def get_named_beta_schedule(schedule_name, num_diffusion_timesteps):
     """
@@ -37,6 +41,16 @@ def get_named_beta_schedule(schedule_name, num_diffusion_timesteps):
         return betas_for_alpha_bar(
             num_diffusion_timesteps,
             lambda t: math.cos((t + 0.008) / 1.008 * math.pi / 2) ** 2,
+        )
+    elif schedule_name == "sigmoid":
+        start = -3
+        end = 3
+        tau = 1
+        v_start = sigmoid(start / tau)
+        v_end = sigmoid(end / tau)
+        return betas_for_alpha_bar(
+            num_diffusion_timesteps,
+            lambda t: (-sigmoid((((t + 0.008) / 1.008)*(end - start) + start)/tau)+v_end)/(v_end - v_start),
         )
     else:
         raise NotImplementedError(f"unknown beta schedule: {schedule_name}")
