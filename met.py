@@ -103,7 +103,7 @@ def main():
 
     # Get the list of all files and directories
     path = "/mnt/nfs/efernandez/datasets/dataRF/RF_test/"
-    dir_list = os.listdir(path)
+    dir_list = sorted(os.listdir(path))
     print("Files and directories in '", path, "' :")
     # prints all files
     print(dir_list)
@@ -119,7 +119,6 @@ def main():
 
     for simu in dir_list:
         sub_row = []
-        n_sample+=1
         P = LoadData_nair2020(h5_dir='/nfs/privileged/isalazar/datasets/simulatedCystDataset/raw_0.0Att/',
                             simu_name=simu)
         sub_row.append(n_sample)
@@ -130,6 +129,7 @@ def main():
         sub_row.append(P.c)
 
         rows.append(sub_row)
+        n_sample+=1
 
     # name of csv file
     filename = "/mnt/nfs/efernandez/datasets/test_sim_parameters.csv"
