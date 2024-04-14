@@ -119,6 +119,7 @@ def main():
 
     for simu in dir_list:
         sub_row = []
+        n_sample+=1
         P = LoadData_nair2020(h5_dir='/nfs/privileged/isalazar/datasets/simulatedCystDataset/raw_0.0Att/',
                             simu_name=simu)
         sub_row.append(n_sample)
