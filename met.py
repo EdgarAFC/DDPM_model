@@ -9,6 +9,7 @@ import os
 
 from scipy.signal import hilbert
 
+from metrics import compute_metrics
 
 class PlaneWaveData:
     """ A template class that contains the plane wave data.
@@ -97,7 +98,11 @@ class LoadData_nair2020(PlaneWaveData):
             self.radius = np.array(f['r']).item()
         super().validate()
 
-    
+def make_pixel_grid_from_pos(x_pos, z_pos):
+    zz, xx = np.meshgrid(z_pos, x_pos, indexing="ij") # 'ij' -> rows: z, columns: x
+    yy = xx * 0
+    grid = np.stack((xx, yy, zz), axis=-1)  # [nrows, ncols, 3]
+    return grid
 
 def main():
 
@@ -112,7 +117,7 @@ def main():
         dir_list[i] = dir_list[i][:-4]
 
     # field names
-    fields = [' ', 'id', 'r', 'cx', 'cz', 'c']
+    fields = ['id', 'r', 'cx', 'cz', 'c', 'v6_contrast', 'v6_cnr', 'v6_gcnr', 'v6_snr', 'v7_contrast', 'v7_cnr', 'v7_gcnr', 'v7_snr', 'v9_contrast', 'v9_cnr', 'v9_gcnr', 'v9_snr', 'v10_contrast', 'v10_cnr', 'v10_gcnr', 'v10_snr']
 
     rows = []
     n_sample = 0
@@ -133,6 +138,155 @@ def main():
 
     # name of csv file
     filename = "/mnt/nfs/efernandez/datasets/test_sim_parameters.csv"
+ 
+    # writing to csv file
+    with open(filename, 'w') as csvfile:
+        # creating a csv writer object
+        csvwriter = csv.writer(csvfile)
+ 
+        # writing the fields
+        csvwriter.writerow(fields)
+ 
+        # writing the data rows
+        csvwriter.writerows(rows)
+
+    n_sample = 0
+
+    depths = np.linspace(19*1e-3, 19.1*1e-3, num=800)
+    laterals = np.linspace(30*1e-3, 80*1e-3, num=128)
+    grid = make_pixel_grid_from_pos(x_pos=laterals, z_pos=depths)
+
+    model6_met=[]
+    model7_met=[]
+    model9_met=[]
+    model10_met=[]
+
+    model6_contrast=[]
+    model6_cnr=[]
+    model6_gcnr=[]
+    model6_snr=[]
+
+    model7_contrast=[]
+    model7_cnr=[]
+    model7_gcnr=[]
+    model7_snr=[]
+
+    model9_contrast=[]
+    model9_cnr=[]
+    model9_gcnr=[]
+    model9_snr=[]
+
+    model10_contrast=[]
+    model10_cnr=[]
+    model10_gcnr=[]
+    model10_snr=[]
+
+    for simu in dir_list:
+        filename=simu+".npy"
+
+        sub_row = []
+
+        P = LoadData_nair2020(h5_dir='/nfs/privileged/isalazar/datasets/simulatedCystDataset/raw_0.0Att/',
+                            simu_name=simu)
+        sub_row.append(n_sample)
+        sub_row.append(int(simu[4:]))
+        r = P.radius
+        cx = P.pos_lat
+        cz = P.pos_ax
+        sub_row.append(P.radius)
+        sub_row.append(P.pos_lat)
+        sub_row.append(P.pos_ax)
+        sub_row.append(P.c)
+
+        #testing model v6
+        dir_model_v6 = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_50epoch_gen/'
+        bmode_output = np.load(dir_model_v6+filename).squeeze()
+        bmode_output = (bmode_output + 1) * 30 - 60
+        contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
+        sub_row.append(contrast)
+        sub_row.append(cnr)
+        sub_row.append(gcnr)
+        sub_row.append(snr)
+        model6_contrast.append(contrast)
+        model6_cnr.append(cnr)
+        model6_gcnr.append(gcnr)
+        model6_snr.append(snr)
+
+        #testing model v7
+        dir_model_v7 = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v7_TT_50epoch_gen/'
+        bmode_output = np.load(dir_model_v7+filename).squeeze()
+        bmode_output = (bmode_output + 1) * 30 - 60
+        contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
+        sub_row.append(contrast)
+        sub_row.append(cnr)
+        sub_row.append(gcnr)
+        sub_row.append(snr) 
+        model7_contrast.append(contrast)
+        model7_cnr.append(cnr)
+        model7_gcnr.append(gcnr)
+        model7_snr.append(snr)
+
+        #testing model v9
+        dir_model_v9 = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v9_TT_50epoch_gen/'
+        bmode_output = np.load(dir_model_v9+filename).squeeze()
+        bmode_output = (bmode_output + 1) * 30 - 60
+        contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
+        sub_row.append(contrast)
+        sub_row.append(cnr)
+        sub_row.append(gcnr)
+        sub_row.append(snr)
+        model9_contrast.append(contrast)
+        model9_cnr.append(cnr)
+        model9_gcnr.append(gcnr)
+        model9_snr.append(snr)
+
+        #testing model v10
+        dir_model_v10 = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v10_TT_50epoch_gen/'
+        bmode_output = np.load(dir_model_v10+filename).squeeze()
+        bmode_output = (bmode_output + 1) * 30 - 60
+        contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
+        sub_row.append(contrast)
+        sub_row.append(cnr)
+        sub_row.append(gcnr)
+        sub_row.append(snr)
+        model10_contrast.append(contrast)
+        model10_cnr.append(cnr)
+        model10_gcnr.append(gcnr)
+        model10_snr.append(snr)
+
+        rows.append(sub_row)
+        n_sample+=1
+
+    model6_met.append(model6_contrast)
+    model6_met.append(model6_cnr)
+    model6_met.append(model6_gcnr)
+    model6_met.append(model6_snr)
+
+    model7_met.append(model7_contrast)
+    model7_met.append(model7_cnr)
+    model7_met.append(model7_gcnr)
+    model7_met.append(model7_snr)
+
+    model9_met.append(model9_contrast)
+    model9_met.append(model9_cnr)
+    model9_met.append(model9_gcnr)
+    model9_met.append(model9_snr)
+
+    model10_met.append(model10_contrast)
+    model10_met.append(model10_cnr)
+    model10_met.append(model10_gcnr)
+    model10_met.append(model10_snr)
+
+    save_dir='/mnt/nfs/efernandez/generated_samples/DDPM_model/'
+
+    np.save(save_dir+"/met_6.npy", np.array(model6_met))
+    np.save(save_dir+"/met_7.npy", np.array(model7_met))
+    np.save(save_dir+"/met_9.npy", np.array(model9_met))
+    np.save(save_dir+"/met_10.npy", np.array(model10_met))
+
+    
+    # name of csv file
+    filename = "/mnt/nfs/efernandez/datasets/test_models.csv"
  
     # writing to csv file
     with open(filename, 'w') as csvfile:
