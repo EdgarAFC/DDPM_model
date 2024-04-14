@@ -150,10 +150,11 @@ def main():
         # writing the data rows
         csvwriter.writerows(rows)
 
+    rows = []
     n_sample = 0
 
-    depths = np.linspace(19*1e-3, 19.1*1e-3, num=800)
-    laterals = np.linspace(30*1e-3, 80*1e-3, num=128)
+    depths = np.linspace(30*1e-3, 80*1e-3, num=800)
+    laterals = np.linspace(19*1e-3, 19.1*1e-3, num=128)
     grid = make_pixel_grid_from_pos(x_pos=laterals, z_pos=depths)
 
     model6_met=[]
