@@ -150,7 +150,7 @@ def main():
 
     test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_50epoch_gen'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_50epoch_genmult/'
     # save_dir = '/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_50epoch'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
@@ -164,10 +164,11 @@ def main():
     y = y.to(device)
 
     batch_number=0
+    num_mult_gen=30
 
     average_sample=np.zeros((800,128))
 
-    for i in range(1,30+1):
+    for i in range(1,num_mult_gen+1):
         generated_samples = diffusion.p_sample_loop(model13A, y.shape, x, progress=False, clip_denoised=True)
 
     # # loss is mean squared error between the predicted and true noise
@@ -185,13 +186,16 @@ def main():
             # plt.title('ENH')
             # plt.show()
             name = (test_dataset.images[batch_number * BATCH_SIZE + id])
-            np.save(save_dir+f"/{name}/"+f"sample{i}.npy", sample.cpu().detach().numpy())
+            save_dir_mult=save_dir+f'{name}/'
+            if not os.path.exists(save_dir_mult):
+                os.mkdir(save_dir_mult)
+            np.save(save_dir_mult+f"sample{i}.npy", sample.cpu().detach().numpy())
             sample_i=sample.cpu().detach().numpy()
             sample_i=sample_i.squeeze()
             average_sample+=sample_i
 
-    average_sample=average_sample/30
-    np.save(save_dir+f"/{name}/"+f"averaged_sample{i}.npy", average_sample)
+    average_sample=average_sample/num_mult_gen
+    np.save(save_dir_mult+f"averaged_sample{i}.npy", average_sample)
 
     
         
