@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader, Dataset, random_split
 import guided_diffusion_v3 as gd
 from datetime import datetime
 import torch.nn.functional as func
-from model7 import UNETv13
+from model7_shift_scale import UNETv13
 # from model4 import UNETv10_5, UNETv10_5_2
 import torch.nn as nn
 
@@ -19,73 +19,49 @@ TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 
+###############################
+file_loss = open("/mnt/nfs/efernandez/log_files/DDPM_model/log_w10.txt", "w")
+file_loss.close()
+################################
+def write_to_file(input): 
+    with open("/mnt/nfs/efernandez/log_files/DDPM_model/log_w10.txt", "a") as textfile: 
+        textfile.write(str(input) + "\n") 
+    textfile.close()
+
 '''
 DATASET
 '''
-#creating our own Dataset
-#esta clase va a heredar de la clase Dataset de Pytorch
 class ONEPW_Dataset(Dataset):
-    def __init__(self, data, onepw_img=None, img_transforms=None, onepw_img_transforms=None):
+    def __init__(self, data, onepw_img):
         '''
         data - train data path
         enh_img - train enhanced images path
         '''
         self.train_data = data
         self.train_onepw_img = onepw_img
-        self.img_transforms = img_transforms
-        self.onepw_img_transforms = onepw_img_transforms
 
         self.images = sorted(os.listdir(self.train_data))
         self.onepw_images = sorted(os.listdir(self.train_onepw_img))
   
-    #regresar la longitud de la lista, cuanto selementos hay en el dataset
+    #regresar la longitud de la lista, cuantos elementos hay en el dataset
     def __len__(self):
         if self.onepw_images is not None:
-            assert len(self.images) == len(self.onepw_images), 'not the same number of images ans enh_images'
+          assert len(self.images) == len(self.onepw_images), 'not the same number of images ans enh_images'
         return len(self.images)
 
     def __getitem__(self, idx):
         rf_image_name = os.path.join(self.train_data, self.images[idx])
         rf_image = np.load(rf_image_name)
-        trans = T.ToTensor()
+        rf_image = torch.Tensor(rf_image)
+        rf_image = rf_image.permute(2, 0, 1)
 
-        if self.img_transforms is not None:
-            rf_image = Image.fromarray(rf_image)
-            rf_image = self.img_transforms(rf_image)
-        else:
-            #rf_image = trans(np.float32(rf_image))
-            # rf_image = trans(np.float32(rf_image)).unsqueeze(0)
-            #rf_image = F.interpolate(rf_image, size=(64,64), mode='bilinear', align_corners=False)
-            # rf_image = rf_image.squeeze(0)
-            #img = F.interpolate(img, size=(64,64), mode='bilinear', align_corners=False)
-            #img = img.squeeze(0)
-            #img = trans(img)
-            rf_image = trans(np.float32(rf_image))
-
-
-        if self.train_onepw_img is not None:
-            onepw_image_name = os.path.join(self.train_onepw_img, self.onepw_images[idx])
-            onepw_img = np.load(onepw_image_name)
-            if self.onepw_img_transforms is not None:
-                onepw_img = Image.fromarray(onepw_img)
-                onepw_img = self.onepw_img_transforms(onepw_img)
-            else:
-                #enh_img = trans(np.float32(enh_img))
-                # onepw_img = trans(np.float32(onepw_img)).unsqueeze(0)
-                #enh_img = F.interpolate(enh_img, size=(64,64), mode='bilinear', align_corners=False)
-                # onepw_img = onepw_img.squeeze(0)
-                # new_min = -1
-                # new_max = 1
-                # enh_img = enh_img * (new_max - new_min) + new_min
-                #enh_img = F.interpolate(enh_img, size=(64,64), mode='bilinear', align_corners=False)
-                #enh_img = enh_img.squeeze(0)
-                #enh_img = trans(enh_img)
-                onepw_img = trans(np.float32(onepw_img))
-                new_min = -1
-                new_max = 1
-                onepw_img = onepw_img * (new_max - new_min) + new_min
-        else:
-            return rf_image
+        onepw_image_name = os.path.join(self.train_onepw_img, self.onepw_images[idx])
+        onepw_img = np.load(onepw_image_name)
+        onepw_img = torch.Tensor(onepw_img)
+        onepw_img = onepw_img.unsqueeze(0)
+        new_min = -1
+        new_max = 1
+        onepw_img = onepw_img * (new_max - new_min) + new_min
 
         return rf_image, onepw_img
 
@@ -94,13 +70,13 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v11_TT_50epoch'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_100steps'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
     # training hyperparameters
     batch_size = 4  # 4 for testing, 16 for training
-    n_epoch = 50
+    n_epoch = 500
     l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
     # Loading Data
@@ -127,8 +103,8 @@ def main():
         if i==9: break
 
     # DDPM noise schedule
-    time_steps = 1000
-    betas = gd.get_named_beta_schedule('sigmoid', time_steps)
+    time_steps = 100
+    betas = gd.get_named_beta_schedule('linear', time_steps)
     diffusion = gd.SpacedDiffusion(
         use_timesteps = gd.space_timesteps(time_steps, section_counts=[time_steps]),
         betas = betas,
@@ -156,6 +132,8 @@ def main():
     nn_model.train()
     # pbar = tqdm(range(trained_epochs+1,n_epoch+1), mininterval=2)
     print(f' Epoch {trained_epochs}/{n_epoch}, {datetime.now()}')
+    write_to_file('Training')
+    write_to_file(datetime.now())
     for ep in range(trained_epochs+1, n_epoch+1):
         # pbar = tqdm(train_loader, mininterval=2)
         for x, y in train_loader:  # x: images
@@ -179,10 +157,12 @@ def main():
             loss_arr.append(loss.item())
             optim.step()
             # torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
+            write_to_file('Batch time:')
+            write_to_file(str(datetime.now()))
 
         print(f' Epoch {ep:03}/{n_epoch}, loss: {loss_arr[-1]:.2f}, {datetime.now()}')
         # save model every x epochs
-        if ep % 5 == 0 or ep == int(n_epoch) or ep == 0:
+        if ep % 10 == 0 or ep == int(n_epoch) or ep == 1:
             torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
             np.save(save_dir+f"/loss_{ep}.npy", np.array(loss_arr))
 
