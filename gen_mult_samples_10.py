@@ -165,7 +165,7 @@ def main():
 
     batch_number=0
 
-    average_sample=np.zeros(800,128)
+    average_sample=np.zeros((800,128))
 
     for i in range(1,30+1):
         generated_samples = diffusion.p_sample_loop(model13A, y.shape, x, progress=False, clip_denoised=True)
