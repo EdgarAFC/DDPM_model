@@ -132,8 +132,8 @@ def main():
     nn_model.train()
     # pbar = tqdm(range(trained_epochs+1,n_epoch+1), mininterval=2)
     print(f' Epoch {trained_epochs}/{n_epoch}, {datetime.now()}')
-    # write_to_file('Training')
-    # write_to_file(datetime.now())
+    write_to_file('Training')
+    write_to_file(datetime.now())
     for ep in range(trained_epochs+1, n_epoch+1):
         # pbar = tqdm(train_loader, mininterval=2)
         for x, y in train_loader:  # x: images
@@ -158,11 +158,13 @@ def main():
             optim.step()
             # torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
             # write_to_file('Batch time:')
-            write_to_file(str(datetime.now()))
+            # write_to_file(str(datetime.now()))
 
         print(f' Epoch {ep:03}/{n_epoch}, loss: {loss_arr[-1]:.2f}, {datetime.now()}')
+        write_to_file('Epoch '+str(ep))
+        write_to_file(str(datetime.now()))
         # save model every x epochs
-        if ep % 10 == 0 or ep == int(n_epoch) or ep == 1:
+        if ep % 20 == 0 or ep == int(n_epoch) or ep == 1:
             torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
             np.save(save_dir+f"/loss_{ep}.npy", np.array(loss_arr))
 
