@@ -121,7 +121,7 @@ def create_gaussian_diffusion(
 
 def main():
 
-    diffusion = create_gaussian_diffusion(noise_schedule="linear")
+    diffusion = create_gaussian_diffusion(noise_schedule="linear", steps=100)
 
     TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
     TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
@@ -150,12 +150,12 @@ def main():
 
     test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_50epoch_gen'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_100steps/380epochs/'
     # save_dir = '/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_50epoch'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
-    model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_50epoch'
-    training_epochs = 50#10
+    model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_100steps/'
+    training_epochs = 380#10
     model13A = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
     model13A.load_state_dict(torch.load(f"{model_dir}/model_{training_epochs}.pth", map_location=device))
 
