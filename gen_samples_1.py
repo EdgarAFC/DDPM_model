@@ -12,7 +12,7 @@ from torchvision import transforms
 import PIL
 from PIL import Image
 
-from model7 import UNETv13
+from model_diff import UNETv13
 import torch.nn.functional as func
 
 ################################
@@ -121,7 +121,7 @@ def create_gaussian_diffusion(
 
 def main():
 
-    diffusion = create_gaussian_diffusion(noise_schedule="linear")
+    diffusion = create_gaussian_diffusion(noise_schedule="linear", steps=100)
 
     TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
     TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
@@ -150,12 +150,13 @@ def main():
 
     test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v9_TT_50epoch_gen'
+    # save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v9_TT_50epoch_gen'
     # save_dir = '/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_50epoch'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_test'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
-    model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v9_TT_50epoch'
-    training_epochs = 50#10
+    model_dir='/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_300epoch/'
+    training_epochs = 380#10
     model13A = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
     model13A.load_state_dict(torch.load(f"{model_dir}/model_{training_epochs}.pth", map_location=device))
 
@@ -170,7 +171,8 @@ def main():
         x = x.to(device)
         y = y.to(device)
 
-        generated_samples = diffusion.p_sample_loop(model13A, y.shape, x, progress=False, clip_denoised=True)
+        # generated_samples = diffusion.p_sample_loop(model13A, y.shape, x, progress=False, clip_denoised=True)
+        generated_samples = model13A(x)
 
     # # loss is mean squared error between the predicted and true noise
     # mse_loss.append(func.mse_loss(generated_image, y))
