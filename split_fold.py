@@ -149,7 +149,7 @@ def main():
     folder_ONEPW_train = "/nfs/privileged/edgar/datasets/dataONEPW/ONEPW_train"
     folder_ONEPW_test = "/nfs/privileged/edgar/datasets/dataONEPW/ONEPW_test"
 
-    source_folder_75PW = "/mnt/nfs/efernandez/datasets/data75PW/75PW_train"   #It needs to be changed later   
+    source_folder_75PW = "/mnt/nfs/efernandez/datasets/data75PW/75PW_gen"   #It needs to be changed later   
     folder_75PW_train = "/nfs/privileged/edgar/datasets/dataENH/75PW_train"
     folder_75PW_test = "/nfs/privileged/edgar/datasets/dataENH/75PW_test"
 
