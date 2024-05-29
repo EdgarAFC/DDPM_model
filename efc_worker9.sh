@@ -3,8 +3,8 @@
 #SBATCh --nodes=1
 #SBATCH --partition=thinkstation-p360
 #SBATCH --nodelist=worker9
-#SBATCH --output="log_model6_100steps.out"
+#SBATCH --output="log_modelvf_100steps.out"
 
 source /etc/profile.d/modules.sh
-module load students_env/1.0
+module load jesus/1.0
 srun python /mnt/nfs/efernandez/projects/DDPM_model/main.py

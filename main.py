@@ -15,16 +15,17 @@ from torchvision import transforms as T
 import PIL
 from PIL import Image
 
-TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
+TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train2'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
+TRAIN_75PW_PATH= '/nfs/privileged/edgar/datasets/dataENH/75PW_train'
 
 ###############################
-file_loss = open("/mnt/nfs/efernandez/log_files/DDPM_model/log_w10.txt", "w")
+file_loss = open("/mnt/nfs/efernandez/log_files/DDPM_model/log_fv.txt", "w")
 file_loss.close()
 ################################
 def write_to_file(input): 
-    with open("/mnt/nfs/efernandez/log_files/DDPM_model/log_w10.txt", "a") as textfile: 
+    with open("/mnt/nfs/efernandez/log_files/DDPM_model/log_fv.txt", "a") as textfile: 
         textfile.write(str(input) + "\n") 
     textfile.close()
 
@@ -70,7 +71,7 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_100steps'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/FV'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
@@ -86,7 +87,7 @@ def main():
     # output_folder = r'C:\Users\u_imagenes\Documents\smerino\training\target_enh'
 
 
-    train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_ONEPW_PATH)
+    train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_75PW_PATH)
 
     BATCH_SIZE = 4
 
