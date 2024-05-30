@@ -138,20 +138,20 @@ def split_vectors(source_folder_RF, folder_RF_train, folder_RF_test,
 def main():
 
     source_folder_RF = "/nfs/privileged/isalazar/datasets/simulatedCystDataset/TUFFC/input_id"
-    folder_RF_train = "/mnt/nfs/edgar/datasets/dataRF/RF_train2"
-    folder_RF_test = "/mnt/nfs/edgar/datasets/dataRF/RF_test2"
+    folder_RF_train = "/mnt/nfs/efernandez/datasets/dataRF/RF_train2"
+    folder_RF_test = "/mnt/nfs/efernandez/datasets/dataRF/RF_test2"
 
     source_folder_ENH = "/nfs/privileged/isalazar/datasets/simulatedCystDataset/TUFFC/target_enh"
-    folder_ENH_train = "/mnt/nfs/edgar/datasets/dataENH/ENH_train"
-    folder_ENH_test = "/mnt/nfs/edgar/datasets/dataENH/ENH_test"
+    folder_ENH_train = "/mnt/nfs/efernandez/datasets/dataENH/ENH_train"
+    folder_ENH_test = "/mnt/nfs/efernandez/datasets/dataENH/ENH_test"
 
     source_folder_ONEPW = "/nfs/privileged/isalazar/datasets/simulatedCystDataset/TUFFC/target_from_raw"
-    folder_ONEPW_train = "/mnt/nfs/edgar/datasets/dataONEPW/ONEPW_train"
-    folder_ONEPW_test = "/mnt/nfs/edgar/datasets/dataONEPW/ONEPW_test"
+    folder_ONEPW_train = "/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train"
+    folder_ONEPW_test = "/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_test"
 
     source_folder_75PW = "/mnt/nfs/efernandez/datasets/data75PW/75PW_gen"   #It needs to be changed later   
-    folder_75PW_train = "//mnt/nfs/edgar/datasets/dataENH/75PW_train"
-    folder_75PW_test = "/mnt/nfs/edgar/datasets/dataENH/75PW_test"
+    folder_75PW_train = "/mnt/nfs/efernandez/datasets/dataENH/75PW_train"
+    folder_75PW_test = "/mnt/nfs/efernandez/datasets/dataENH/75PW_test"
 
     # source_folder_RF="/TESIS/DATOS_1/input_id"
     # folder_RF_train = "/TESIS/DATOS_1/rf_train"
