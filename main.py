@@ -18,7 +18,7 @@ from PIL import Image
 TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train2'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
-TRAIN_75PW_PATH= '/nfs/privileged/edgar/datasets/data75PW/75PW_train'
+TRAIN_75PW_PATH= '/mnt/nfs/efernandez/datasets/data75PW/75PW_train'
 
 ###############################
 file_loss = open("/mnt/nfs/efernandez/log_files/DDPM_model/log_fv.txt", "w")
