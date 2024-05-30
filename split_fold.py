@@ -90,16 +90,16 @@ def split_vectors(source_folder_RF, folder_RF_train, folder_RF_test,
         vectors_folder_75PW_test.append(all_files_75PW[ind-1])
 
     
-    # Copy selected vectors to destination folders
-    for vector_file in vectors_folder_RF_train:
-        source_path = os.path.join(source_folder_RF, vector_file)
-        dest_path = os.path.join(folder_RF_train, vector_file)
-        shutil.copy2(source_path, dest_path)
+    # # Copy selected vectors to destination folders
+    # for vector_file in vectors_folder_RF_train:
+    #     source_path = os.path.join(source_folder_RF, vector_file)
+    #     dest_path = os.path.join(folder_RF_train, vector_file)
+    #     shutil.copy2(source_path, dest_path)
     
-    for vector_file in vectors_folder_RF_test:
-        source_path = os.path.join(source_folder_RF, vector_file)
-        dest_path = os.path.join(folder_RF_test, vector_file)
-        shutil.copy2(source_path, dest_path)
+    # for vector_file in vectors_folder_RF_test:
+    #     source_path = os.path.join(source_folder_RF, vector_file)
+    #     dest_path = os.path.join(folder_RF_test, vector_file)
+    #     shutil.copy2(source_path, dest_path)
 
     # Copy selected vectors to destination folders
     # for vector_file in vectors_folder_ENH_train:
