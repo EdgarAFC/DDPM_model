@@ -3,8 +3,8 @@
 #SBATCh --nodes=1
 #SBATCH --partition=thinkstation-p360
 #SBATCH --nodelist=worker8
-#SBATCH --output="log_split.out"
+#SBATCH --output="log_main.out"
 
 source /etc/profile.d/modules.sh
 module load jesus/1.0
-srun python /mnt/nfs/efernandez/projects/DDPM_model/split_fold.py
+srun python /mnt/nfs/efernandez/projects/DDPM_model/main.py
