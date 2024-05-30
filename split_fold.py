@@ -150,8 +150,8 @@ def main():
     folder_ONEPW_test = "/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_test"
 
     source_folder_75PW = "/mnt/nfs/efernandez/datasets/data75PW/75PW_gen"   #It needs to be changed later   
-    folder_75PW_train = "/mnt/nfs/efernandez/datasets/dataENH/75PW_train"
-    folder_75PW_test = "/mnt/nfs/efernandez/datasets/dataENH/75PW_test"
+    folder_75PW_train = "/mnt/nfs/efernandez/datasets/data75PW/75PW_train"
+    folder_75PW_test = "/mnt/nfs/efernandez/datasets/data75PW/75PW_test"
 
     # source_folder_RF="/TESIS/DATOS_1/input_id"
     # folder_RF_train = "/TESIS/DATOS_1/rf_train"
