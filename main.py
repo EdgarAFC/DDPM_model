@@ -117,6 +117,7 @@ class ONEPW_Dataset2(Dataset):
         neg8_image_name = os.path.join(self.train_neg8_img, self.neg8_images[idx])
         neg8_image = np.load(neg8_image_name)
         neg8_image = torch.Tensor(neg8_image)
+        print("SHAPE neg8", neg8_image.shape)
         neg8_image = neg8_image.permute(2, 0, 1)
 
         zero_image_name = os.path.join(self.train_zero_img, self.zero_images[idx])
@@ -132,7 +133,7 @@ class ONEPW_Dataset2(Dataset):
         pos16_image_name = os.path.join(self.train_pos16_img, self.pos16_images[idx])
         pos16_image = np.load(pos16_image_name)
 
-        print("SHAPE", pos16_image.shape)
+        print("SHAPE pos16", pos16_image.shape)
         pos16_image = torch.Tensor(pos16_image)
         pos16_image = pos16_image.permute(2, 0, 1)
         
