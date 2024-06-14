@@ -127,7 +127,7 @@ class ONEPW_Dataset2(Dataset):
 
         pos8_image_name = os.path.join(self.train_pos8_img, self.pos8_images[idx])
         pos8_image = np.load(pos8_image_name)
-        pos8_image = torch.Tensor(neg16_image)
+        pos8_image = torch.Tensor(pos8_image)
         pos8_image = pos8_image.permute(2, 0, 1)
 
         pos16_image_name = os.path.join(self.train_pos16_img, self.pos16_images[idx])
