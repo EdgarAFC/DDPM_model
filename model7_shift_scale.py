@@ -7,7 +7,7 @@ from RRDB import RRDBNet
 class UNETv13(nn.Module):
     def __init__(
             self, 
-            in_channels=3, 
+            in_channels=11,   #3
             out_channels=1, 
             features=[64, 128, 256, 512], 
             emb_dim = 256,

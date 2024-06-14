@@ -20,6 +20,14 @@ TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 TRAIN_75PW_PATH= '/mnt/nfs/efernandez/datasets/data75PW/75PW_train'
 
+
+TRAIN_75PW_16m_PATH='/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_16neg/'
+TRAIN_75PW_8m_PATH='/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_8neg/'
+TRAIN_75PW_0_PATH='/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_zero/'
+TRAIN_75PW_8p_PATH='/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_8pos/'
+TRAIN_75PW_16p_PATH='/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_16pos/'
+                
+
 ###############################
 file_loss = open("/mnt/nfs/efernandez/log_files/DDPM_model/log_fv.txt", "w")
 file_loss.close()
@@ -65,6 +73,79 @@ class ONEPW_Dataset(Dataset):
         onepw_img = onepw_img * (new_max - new_min) + new_min
 
         return rf_image, onepw_img
+    
+'''
+DATASET2
+'''
+class ONEPW_Dataset2(Dataset):
+    def __init__(self, onepw_img, neg16_img, neg8_img, zero_img, pos8_img, pos16_img):
+        '''
+        data - train data path
+        enh_img - train enhanced images path
+        '''
+        # self.train_data = data
+        self.train_neg16_img = neg16_img
+        self.train_neg8_img = neg8_img
+        self.train_zero_img = zero_img
+        self.train_pos8_img = pos8_img
+        self.train_pos16_img = pos16_img
+
+        self.train_onepw_img = onepw_img
+
+        # self.images = sorted(os.listdir(self.train_data))
+
+        self.neg16_images = sorted(os.listdir(self.train_neg16_img))
+        self.neg8_images = sorted(os.listdir(self.train_neg8_img))
+        self.zero_images = sorted(os.listdir(self.train_zero_img))
+        self.pos8_images = sorted(os.listdir(self.train_pos8_img))
+        self.pos16_images = sorted(os.listdir(self.train_pos16_img))
+
+        self.onepw_images = sorted(os.listdir(self.train_onepw_img))
+  
+    #regresar la longitud de la lista, cuantos elementos hay en el dataset
+    def __len__(self):
+        if self.onepw_images is not None:
+          assert len(self.images) == len(self.onepw_images), 'not the same number of images ans enh_images'
+        return len(self.images)
+
+    def __getitem__(self, idx):
+        neg16_image_name = os.path.join(self.train_neg16_img, self.neg16_images[idx])
+        neg16_image = np.load(neg16_image_name)
+        neg16_image = torch.Tensor(neg16_image)
+        neg16_image = neg16_image.permute(2, 0, 1)
+
+        neg8_image_name = os.path.join(self.train_neg8_img, self.neg8_images[idx])
+        neg8_image = np.load(neg8_image_name)
+        neg8_image = torch.Tensor(neg8_image)
+        neg8_image = neg8_image.permute(2, 0, 1)
+
+        zero_image_name = os.path.join(self.train_zero_img, self.zero_images[idx])
+        zero_image = np.load(zero_image_name)
+        zero_image = torch.Tensor(zero_image)
+        zero_image = zero_image.permute(2, 0, 1)
+
+        pos8_image_name = os.path.join(self.train_pos8_img, self.pos8_images[idx])
+        pos8_image = np.load(pos8_image_name)
+        pos8_image = torch.Tensor(neg16_image)
+        pos8_image = pos8_image.permute(2, 0, 1)
+
+        pos16_image_name = os.path.join(self.train_pos16_img, self.pos16_images[idx])
+        pos16_image = np.load(pos16_image_name)
+        pos16_image = torch.Tensor(pos16_image)
+        pos16_image = pos16_image.permute(2, 0, 1)
+        
+        # Concatenate the tensors along the first dimension
+        combined_input_tensor = torch.cat((neg16_image, neg8_image, zero_image, pos8_image, pos16_image), dim=0)
+
+        onepw_image_name = os.path.join(self.train_onepw_img, self.onepw_images[idx])
+        onepw_img = np.load(onepw_image_name)
+        onepw_img = torch.Tensor(onepw_img)
+        onepw_img = onepw_img.unsqueeze(0)
+        new_min = -1
+        new_max = 1
+        onepw_img = onepw_img * (new_max - new_min) + new_min
+
+        return combined_input_tensor, onepw_img
 
 def main():
     # network hyperparameters
@@ -87,7 +168,9 @@ def main():
     # output_folder = r'C:\Users\u_imagenes\Documents\smerino\training\target_enh'
 
 
-    train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_75PW_PATH)
+    # train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_75PW_PATH)
+
+    train_dataset = ONEPW_Dataset2(TRAIN_75PW_16m_PATH, TRAIN_75PW_8m_PATH, TRAIN_75PW_0_PATH, TRAIN_75PW_8p_PATH, TRAIN_75PW_16p_PATH, TRAIN_75PW_PATH)
 
     BATCH_SIZE = 4
 
