@@ -105,8 +105,8 @@ class ONEPW_Dataset2(Dataset):
     #regresar la longitud de la lista, cuantos elementos hay en el dataset
     def __len__(self):
         if self.onepw_images is not None:
-          assert len(self.images) == len(self.onepw_images), 'not the same number of images ans enh_images'
-        return len(self.images)
+          assert len(self.neg16_images) == len(self.onepw_images), 'not the same number of images ans enh_images'
+        return len(self.neg16_images)
 
     def __getitem__(self, idx):
         neg16_image_name = os.path.join(self.train_neg16_img, self.neg16_images[idx])
