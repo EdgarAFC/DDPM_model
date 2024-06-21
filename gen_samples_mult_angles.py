@@ -208,7 +208,7 @@ def main():
         # show_reverse_process(intermediates)
 
 
-        generated_samples = diffusion.p_sample_loop(model13A, y.shape, x, progress=True, clip_denoised=True)
+        generated_samples = diffusion.p_sample_loop(model13A, y.shape, x, progress=False, clip_denoised=True)
         # generated_samples=model13A(x)
 
     # # loss is mean squared error between the predicted and true noise
