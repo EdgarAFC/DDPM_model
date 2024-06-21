@@ -228,7 +228,7 @@ def main():
             # plt.title('ENH')
             # plt.show()
             # sample = sample.cpu().numpy()
-            name = (train_dataset.images[batch_number * BATCH_SIZE + id])
+            name = (train_dataset.onepw_images[batch_number * BATCH_SIZE + id])
             print(name)
             print(sample.shape)
             np.save(save_dir+f"/{name}", sample.cpu().detach().numpy())
