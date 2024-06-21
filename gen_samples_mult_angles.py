@@ -174,11 +174,11 @@ def main():
     train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
     # save_dir = '/CODIGOS_TESIS/T2/generated_samples/DDPM_model/v6_TT_300epoch_gen_samples'
-    save_dir = '/CODIGOS_TESIS/T2/generated_samples/DDPM_model/v6_TT_100steps_75pw_samples'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps_75pw_samples'
     # save_dir = '/CODIGOS_TESIS/T2/generated_samples/UNET_Difusiva/v1_50epoch_gen_samples'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
-    model_dir='/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_100steps'
+    model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/FV/'
     # model_dir='/CODIGOS_TESIS/T2/trained_models/UNET_Difusiva/'
     # model_dir = '/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_50epoch'
     training_epochs = 380#10
