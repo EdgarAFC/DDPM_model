@@ -15,7 +15,7 @@ from torchvision import transforms as T
 import PIL
 from PIL import Image
 
-TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train2'
+TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 TRAIN_75PW_PATH= '/mnt/nfs/efernandez/datasets/data75PW/75PW_train'
@@ -155,7 +155,7 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/FV'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/final_model_FF'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
@@ -171,9 +171,9 @@ def main():
     # output_folder = r'C:\Users\u_imagenes\Documents\smerino\training\target_enh'
 
 
-    # train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_75PW_PATH)
+    train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_ONEPW_PATH)
 
-    train_dataset = ONEPW_Dataset2(TRAIN_75PW_16m_PATH, TRAIN_75PW_8m_PATH, TRAIN_75PW_0_PATH, TRAIN_75PW_8p_PATH, TRAIN_75PW_16p_PATH, TRAIN_75PW_PATH)
+    # train_dataset = ONEPW_Dataset2(TRAIN_75PW_16m_PATH, TRAIN_75PW_8m_PATH, TRAIN_75PW_0_PATH, TRAIN_75PW_8p_PATH, TRAIN_75PW_16p_PATH, TRAIN_75PW_PATH)
 
     BATCH_SIZE = 4
 
@@ -202,7 +202,7 @@ def main():
     )
     
     # Model and optimizer
-    nn_model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
+    nn_model = UNETv13(residual=False, attention_res=[], group_norm=False).to(device)
     # nn_model = UNETv10_5_2(emb_dim=64*4).to(device)
     print("Num params: ", sum(p.numel() for p in nn_model.parameters() if p.requires_grad))
 

@@ -7,4 +7,4 @@
 
 source /etc/profile.d/modules.sh
 module load jesus/1.0
-srun python /mnt/nfs/efernandez/projects/DDPM_model/gen_samples_mult_angles.py
+srun python /mnt/nfs/efernandez/projects/DDPM_model/main.py
