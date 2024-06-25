@@ -407,6 +407,7 @@ class ResBlock2(nn.Module):
             # nn.ReLU(),
             normalization(self.out_channels, group_norm),
             SiLU()
+            # nn.ReLU()
             
         )
         self.emb_layers = nn.Sequential(
@@ -427,6 +428,7 @@ class ResBlock2(nn.Module):
             # nn.ReLU(),
             normalization(self.out_channels, group_norm),
             SiLU(),
+            # nn.ReLU(),
             nn.Dropout(p=dropout),
             # zero_module(
             #     conv_nd(dims, self.out_channels, self.out_channels, 3, padding=1)
