@@ -15,10 +15,12 @@ from torchvision import transforms as T
 import PIL
 from PIL import Image
 
-TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
+TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train2'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 TRAIN_75PW_PATH= '/mnt/nfs/efernandez/datasets/data75PW/75PW_train'
+
+TRAIN_7PW_PATH = '/mnt/nfs/efernandez/datasets/data7PW/7PW_gen/'
 
 
 TRAIN_75PW_16m_PATH='/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_16neg/'
@@ -49,8 +51,11 @@ class ONEPW_Dataset(Dataset):
         self.train_data = data
         self.train_onepw_img = onepw_img
 
-        self.images = sorted(os.listdir(self.train_data))
-        self.onepw_images = sorted(os.listdir(self.train_onepw_img))
+        # self.images = sorted(os.listdir(self.train_data))
+        # self.onepw_images = sorted(os.listdir(self.train_onepw_img))
+         # Obtener y ordenar los archivos
+        self.images = sorted(os.listdir(self.train_data))[:3200]  # Asegurar solo 3200 archivos
+        self.onepw_images = sorted(os.listdir(self.train_onepw_img))[:3200]  # Tomar solo los primeros 3200
   
     #regresar la longitud de la lista, cuantos elementos hay en el dataset
     def __len__(self):
@@ -155,7 +160,7 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
     # save_dir = Path(os.getcwd())/'weights'/'v13'
-    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/final_model_FT'
+    save_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/sust_final_model'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
@@ -171,7 +176,7 @@ def main():
     # output_folder = r'C:\Users\u_imagenes\Documents\smerino\training\target_enh'
 
 
-    train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_ONEPW_PATH)
+    train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_7PW_PATH)
 
     # train_dataset = ONEPW_Dataset2(TRAIN_75PW_16m_PATH, TRAIN_75PW_8m_PATH, TRAIN_75PW_0_PATH, TRAIN_75PW_8p_PATH, TRAIN_75PW_16p_PATH, TRAIN_75PW_PATH)
 
@@ -202,13 +207,13 @@ def main():
     )
     
     # Model and optimizer
-    nn_model = UNETv13(residual=False, attention_res=[], group_norm=True).to(device)
+    nn_model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
     # nn_model = UNETv10_5_2(emb_dim=64*4).to(device)
     print("Num params: ", sum(p.numel() for p in nn_model.parameters() if p.requires_grad))
 
     optim = torch.optim.Adam(nn_model.parameters(), lr=l_rate)
 
-    trained_epochs = 160
+    trained_epochs = 300
     if trained_epochs > 0:
         nn_model.load_state_dict(torch.load(save_dir+f"/model_{trained_epochs}.pth", map_location=device))  # From last model
         loss_arr = np.load(save_dir+f"/loss_{trained_epochs}.npy").tolist()  # From last model
@@ -251,7 +256,7 @@ def main():
         write_to_file('Epoch '+str(ep))
         write_to_file(str(datetime.now()))
         # save model every x epochs
-        if ep % 20 == 0 or ep == int(n_epoch) or ep == 1:
+        if ep % 50 == 0 or ep == int(n_epoch) or ep == 1:
             torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
             np.save(save_dir+f"/loss_{ep}.npy", np.array(loss_arr))
 
