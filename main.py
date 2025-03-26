@@ -166,7 +166,7 @@ def main():
 
     # training hyperparameters
     batch_size = 4  # 4 for testing, 16 for training
-    n_epoch = 500
+    n_epoch = 300
     l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
     # Loading Data
@@ -213,7 +213,7 @@ def main():
 
     optim = torch.optim.Adam(nn_model.parameters(), lr=l_rate)
 
-    trained_epochs = 300
+    trained_epochs = 0
     if trained_epochs > 0:
         nn_model.load_state_dict(torch.load(save_dir+f"/model_{trained_epochs}.pth", map_location=device))  # From last model
         loss_arr = np.load(save_dir+f"/loss_{trained_epochs}.npy").tolist()  # From last model
